@@ -20,3 +20,8 @@ class Stock:
         result = requests.get(
             f'{BASE_API_URL}/real-time/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}&fmt=json').json()
         return result
+
+    def get_option_chain(self):
+        result = requests.get(
+            f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
+        return result
