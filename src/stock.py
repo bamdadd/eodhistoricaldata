@@ -1,4 +1,7 @@
+import datetime
+
 import requests
+import requests_cache
 import os
 
 from eod_csv_prices import EODCSVPrices
@@ -12,9 +15,17 @@ class Stock:
         self.api_token = os.environ['EOD_API_TOKEN']
         assert self.api_token
 
-    def get_eod_prices(self):
-        return EODCSVPrices(requests.get(
-            f'{BASE_API_URL}/eod/{self.symbol.upper()}.{self.exchange}?api_token='))
+    def get_eod_prices(self, from_date=None, to_date=None):
+        expire_after = datetime.timedelta(days=1)
+        session = requests_cache.CachedSession(cache_name='cache', backend ='sqlite', expire_after = expire_after)
+        response = session.get(
+            f'{BASE_API_URL}/eod/{self.symbol.upper()}.{self.exchange}', params={
+                'api_token': self.api_token,
+                'order': 'd',
+                "from": from_date,
+                "to": to_date
+            })
+        return EODCSVPrices(response)
 
     def get_live_price(self):
         result = requests.get(
