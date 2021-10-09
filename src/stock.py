@@ -14,4 +14,9 @@ class Stock:
 
     def get_eod_prices(self):
         return EODCSVPrices(requests.get(
-            f'{BASE_API_URL}/eod/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}'))
+            f'{BASE_API_URL}/eod/{self.symbol.upper()}.{self.exchange}?api_token='))
+
+    def get_live_price(self):
+        result = requests.get(
+            f'https://eodhistoricaldata.com/api/real-time/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}&fmt=json').json()
+        return result
