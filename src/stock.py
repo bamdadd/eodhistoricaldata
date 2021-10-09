@@ -1,4 +1,5 @@
 import datetime
+import json
 
 import requests
 import requests_cache
@@ -36,7 +37,6 @@ class Stock:
     def get_option_chain(self):
         result = requests.get(
             f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
-
         return OptionChain(result)
 
     def get_fundamentals(self):
