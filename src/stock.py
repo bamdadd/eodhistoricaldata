@@ -25,3 +25,8 @@ class Stock:
         result = requests.get(
             f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
         return result
+
+    def get_fundamentals(self):
+        result = requests.get(
+            f'{BASE_API_URL}/fundamentals/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
+        return result

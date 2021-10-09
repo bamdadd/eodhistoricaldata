@@ -65,3 +65,11 @@ class TestStock(unittest.TestCase):
         self.assertTrue('intrinsicValue' in chain['data'][0]['options']['CALL'][0])
         self.assertTrue('timeValue' in chain['data'][0]['options']['CALL'][0])
         self.assertTrue('updatedAt' in chain['data'][0]['options']['CALL'][0])
+
+
+    def test_stock_fundamental(self):
+        stock = Stock('TSLA')
+        self.assertTrue('General' in stock.get_fundamentals())
+        self.assertTrue('Highlights' in stock.get_fundamentals())
+        self.assertTrue('Earnings' in stock.get_fundamentals())
+        self.assertTrue('Financials' in stock.get_fundamentals())
