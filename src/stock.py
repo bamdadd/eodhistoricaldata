@@ -18,5 +18,5 @@ class Stock:
 
     def get_live_price(self):
         result = requests.get(
-            f'https://eodhistoricaldata.com/api/real-time/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}&fmt=json').json()
+            f'{BASE_API_URL}/real-time/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}&fmt=json').json()
         return result
