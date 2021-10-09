@@ -1,0 +1,1 @@
+BASE_API_URL = 'https://eodhistoricaldata.com/api'
