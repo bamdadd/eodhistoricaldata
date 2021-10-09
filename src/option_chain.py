@@ -4,6 +4,7 @@ class OptionChain:
         self.code = self.chain_dict['code']
         self.data = self.chain_dict['data']
         self.exchange = self.chain_dict['exchange']
+        self.stock_price = self.chain_dict['lastTradePrice']
 
     def get_monthly(self):
         return list(

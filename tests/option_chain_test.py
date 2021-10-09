@@ -28,3 +28,6 @@ class TestOptionChain(unittest.TestCase):
     def test_get_monthly_iv(self):
         ivs = self.chain.get_monthly_iv()
         self.assertEqual({'2021-10-15': 77.9106, '2021-11-19': 75.0463, '2022-01-21': 69.6724}, ivs)
+
+    def test_get_stock_price(self):
+        self.assertEqual(26.3, self.chain.stock_price)
