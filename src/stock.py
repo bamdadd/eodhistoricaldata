@@ -5,6 +5,7 @@ import requests_cache
 import os
 
 from eod_csv_prices import EODCSVPrices
+from option_chain import OptionChain
 from urls import BASE_API_URL
 
 
@@ -35,9 +36,13 @@ class Stock:
     def get_option_chain(self):
         result = requests.get(
             f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
-        return result
+
+        return OptionChain(result)
 
     def get_fundamentals(self):
         result = requests.get(
             f'{BASE_API_URL}/fundamentals/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
         return result
+
+    def get_iv_rank(self):
+        self
