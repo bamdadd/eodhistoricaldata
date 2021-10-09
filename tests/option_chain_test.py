@@ -24,3 +24,7 @@ class TestOptionChain(unittest.TestCase):
     def test_get_monthly_chains(self):
         monthly = self.chain.get_monthly()
         self.assertEqual('MONTHLY', monthly[0]['options']['CALL'][0]['contractPeriod'])
+
+    def test_get_monthly_iv(self):
+        ivs = self.chain.get_monthly_iv()
+        self.assertEqual({'2021-10-15': 77.9106, '2021-11-19': 75.0463, '2022-01-21': 69.6724}, ivs)
