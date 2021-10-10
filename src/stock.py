@@ -6,7 +6,7 @@ import requests_cache
 import os
 
 from eod_csv_prices import EODCSVPrices
-from option_chain import OptionChain
+from option_chains import OptionChains
 from urls import BASE_API_URL
 
 
@@ -19,7 +19,8 @@ class Stock:
 
     def get_eod_prices(self, from_date=None, to_date=None):
         expire_after = datetime.timedelta(days=1)
-        session = requests_cache.CachedSession(cache_name='cache', backend ='sqlite', expire_after = expire_after)
+        session = requests_cache.CachedSession(cache_name='cache', backend='sqlite',
+                                               expire_after=expire_after)
         response = session.get(
             f'{BASE_API_URL}/eod/{self.symbol.upper()}.{self.exchange}', params={
                 'api_token': self.api_token,
@@ -34,15 +35,38 @@ class Stock:
             f'{BASE_API_URL}/real-time/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}&fmt=json').json()
         return result
 
-    def get_option_chain(self):
-        result = requests.get(
-            f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
-        return OptionChain(result)
+    def get_option_chains(self, from_date=None, to_date=None):
+        print(from_date, to_date)
+        expire_after = datetime.timedelta(days=1)
+        session = requests_cache.CachedSession(cache_name='cache', backend='sqlite',
+                                               expire_after=expire_after)
+        result = session.get(
+            f'{BASE_API_URL}/options/{self.symbol.upper()}.{self.exchange}',
+            params={
+                'api_token': self.api_token,
+                "from": from_date,
+                "to": to_date
+            }
+        ).json()
+        return OptionChains(result)
 
     def get_fundamentals(self):
-        result = requests.get(
+        expire_after = datetime.timedelta(days=1)
+        session = requests_cache.CachedSession(cache_name='cache', backend='sqlite',
+                                               expire_after=expire_after)
+        result = session.get(
             f'{BASE_API_URL}/fundamentals/{self.symbol.upper()}.{self.exchange}?api_token={self.api_token}').json()
         return result
 
     def get_iv_rank(self):
-        self
+        # straddle price * 0.85
+        from_date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d")
+        to_date = (datetime.datetime.now() + datetime.timedelta(days=45)).strftime("%Y-%m-%d")
+        ivs = self.get_option_chains(from_date, to_date).get_ivs()
+        print(ivs)
+        all_ivs = list(ivs.values())
+
+        return  all_ivs[-1]/max(all_ivs) * 100
+
+    def get_expected_move(self):
+        pass

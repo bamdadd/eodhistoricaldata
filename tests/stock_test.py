@@ -1,6 +1,6 @@
 import unittest
 
-from option_chain import OptionChain
+from option_chains import OptionChains
 from stock import Stock, EODCSVPrices
 
 
@@ -32,8 +32,8 @@ class TestStock(unittest.TestCase):
 
     def test_options_chain_test(self):
         stock = Stock('TSLA')
-        chain = stock.get_option_chain()
-        self.assertEqual(OptionChain, chain.__class__)
+        chain = stock.get_option_chains()
+        self.assertEqual(OptionChains, chain.__class__)
         self.assertTrue(chain.code)
         self.assertTrue(chain.exchange)
         self.assertTrue(chain.data)
@@ -74,3 +74,7 @@ class TestStock(unittest.TestCase):
         self.assertTrue('Highlights' in stock.get_fundamentals())
         self.assertTrue('Earnings' in stock.get_fundamentals())
         self.assertTrue('Financials' in stock.get_fundamentals())
+
+    def test_get_iv_rank(self):
+        stock = Stock('SPY', exchange='US')
+        self.assertEqual(43, stock.get_iv_rank())
