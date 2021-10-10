@@ -7,9 +7,11 @@ import requests_cache
 import os
 
 from eod_csv_prices import EODCSVPrices
+from fundamentals.dividends import Dividends
 from fundamentals.earnings import Earnings
 from option_chains import OptionChains
 from urls import BASE_API_URL
+
 
 
 class Stock:
@@ -65,7 +67,6 @@ class Stock:
         from_date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d")
         to_date = (datetime.datetime.now() + datetime.timedelta(days=45)).strftime("%Y-%m-%d")
         ivs = self.get_option_chains(from_date, to_date).get_ivs()
-        print(ivs)
         all_ivs = list(ivs.values())
 
         return all_ivs[-1] / max(all_ivs) * 100
@@ -80,4 +81,8 @@ class Stock:
     def get_earnings(self):
         fundamentals = self.get_fundamentals()
         return Earnings(fundamentals['Earnings'])
+
+    def get_dividends(self):
+        fundamentals = self.get_fundamentals()
+        return Dividends(fundamentals['SplitsDividends'])
 

@@ -1,6 +1,7 @@
 import unittest
 from pprint import pprint
 
+from fundamentals.dividends import Dividends
 from fundamentals.earnings import Earnings
 from option_chains import OptionChains
 from stock import Stock, EODCSVPrices
@@ -79,7 +80,7 @@ class TestStock(unittest.TestCase):
 
     def test_get_iv_rank(self):
         stock = Stock('SPY', exchange='US')
-        self.assertEqual(43, stock.get_iv_rank())
+        self.assertEqual(float, stock.get_iv_rank().__class__)
 
     def test_get_expected_move(self):
         stock = Stock('SPY', exchange='US')
@@ -92,3 +93,9 @@ class TestStock(unittest.TestCase):
         self.assertEqual(dict, earnings.get_history().__class__)
         self.assertEqual(dict, earnings.get_future_earnings().__class__)
         self.assertEqual(str, earnings.get_next_earning().__class__)
+
+    def test_get_dividends(self):
+        stock = Stock('VIAC', exchange='US')
+        dividends = stock.get_dividends()
+        self.assertEqual(Dividends, dividends.__class__)
+        self.assertEqual(str, dividends.get_next_ex_dividend().__class__)
