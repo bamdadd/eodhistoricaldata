@@ -78,3 +78,7 @@ class TestStock(unittest.TestCase):
     def test_get_iv_rank(self):
         stock = Stock('SPY', exchange='US')
         self.assertEqual(43, stock.get_iv_rank())
+
+    def test_get_expected_move(self):
+        stock = Stock('SPY', exchange='US')
+        self.assertEqual((16.0225, '2021-11-19'), stock.get_expected_move())

@@ -59,14 +59,18 @@ class Stock:
         return result
 
     def get_iv_rank(self):
-        # straddle price * 0.85
+        # WRONG!
         from_date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d")
         to_date = (datetime.datetime.now() + datetime.timedelta(days=45)).strftime("%Y-%m-%d")
         ivs = self.get_option_chains(from_date, to_date).get_ivs()
         print(ivs)
         all_ivs = list(ivs.values())
 
-        return  all_ivs[-1]/max(all_ivs) * 100
+        return all_ivs[-1] / max(all_ivs) * 100
 
     def get_expected_move(self):
-        pass
+        # straddle price * 0.85
+        atm_contracts = self.get_option_chains().get_at_the_money_contracts()
+        straddle_price = atm_contracts['CALL'][0]['bid'] + atm_contracts['PUT'][0]['bid']
+        expiry = atm_contracts['CALL'][0]['expirationDate']
+        return straddle_price * 0.85, expiry

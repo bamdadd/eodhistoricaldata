@@ -16,10 +16,16 @@ class OptionChains:
             result[m['expirationDate']] = m['impliedVolatility']
         return result
 
+    def get_contracts_by_dte(self, start_dte, end_dte):
+        return list(
+            filter(lambda x: start_dte < x['options']['CALL'][0]['daysBeforeExpiration'] < end_dte,
+                   self.get_monthly()))
+
     def get_at_the_money_contracts(self):
-        # 21-45 DTE contracts
         contracts = self.get_contracts_by_dte(21, 45)
-        threshold = 0.05
+        threshold = 0.001
+        if self.stock_price < 50:
+            threshold = 0.05
         calls = list(
             filter(lambda x: self.stock_price - (self.stock_price * threshold) < x['strike'] < self.stock_price + (self.stock_price * threshold),
                    contracts[0]['options']['CALL']))
@@ -29,7 +35,3 @@ class OptionChains:
                    contracts[0]['options']['PUT']))
         return {"CALL": calls, "PUT": puts}
 
-    def get_contracts_by_dte(self, start_dte, end_dte):
-        return list(
-            filter(lambda x: start_dte < x['options']['CALL'][0]['daysBeforeExpiration'] < end_dte,
-                   self.data))
