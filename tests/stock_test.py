@@ -1,5 +1,7 @@
 import unittest
+from pprint import pprint
 
+from fundamentals.earnings import Earnings
 from option_chains import OptionChains
 from stock import Stock, EODCSVPrices
 
@@ -82,3 +84,11 @@ class TestStock(unittest.TestCase):
     def test_get_expected_move(self):
         stock = Stock('SPY', exchange='US')
         self.assertEqual((16.0225, '2021-11-19'), stock.get_expected_move())
+
+    def test_get_earnings(self):
+        stock = Stock('TSLA', exchange='US')
+        earnings = stock.get_earnings()
+        self.assertEqual(Earnings, earnings.__class__)
+        self.assertEqual(dict, earnings.get_history().__class__)
+        self.assertEqual(dict, earnings.get_future_earnings().__class__)
+        self.assertEqual(str, earnings.get_next_earning().__class__)

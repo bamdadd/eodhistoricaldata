@@ -1,11 +1,13 @@
 import datetime
 import json
+from pprint import pprint
 
 import requests
 import requests_cache
 import os
 
 from eod_csv_prices import EODCSVPrices
+from fundamentals.earnings import Earnings
 from option_chains import OptionChains
 from urls import BASE_API_URL
 
@@ -74,3 +76,8 @@ class Stock:
         straddle_price = atm_contracts['CALL'][0]['bid'] + atm_contracts['PUT'][0]['bid']
         expiry = atm_contracts['CALL'][0]['expirationDate']
         return straddle_price * 0.85, expiry
+
+    def get_earnings(self):
+        fundamentals = self.get_fundamentals()
+        return Earnings(fundamentals['Earnings'])
+
